@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Post
 from .forms import BlogPostForm
 
+
 def get_posts(request):
     """ 
     Create a view that will return a list
@@ -28,18 +29,19 @@ def post_detail(request, pk):
     post.save()
     return render(request, "postdetail.html", {'post': post})
 
+
 def create_or_edit_post(request, pk=None):
     """
     Create a view that allows us to create
-    or edit a post depending on if post ID is
-    null or not
+    or edit a post depending if the Post ID
+    is null or not
     """
     post = get_object_or_404(Post, pk=pk) if pk else None
-    if request.method = 'POST':
+    if request.method == "POST":
         form = BlogPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save()
-            return render(post_detail, post.pk)
+            return redirect(post_detail, post.pk)
     else:
         form = BlogPostForm(instance=post)
     return render(request, 'blogpostform.html', {'form': form})
